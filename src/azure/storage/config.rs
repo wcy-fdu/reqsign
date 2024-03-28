@@ -68,11 +68,14 @@ pub struct Config {
     pub authority_host: Option<String>,
 }
 
-pub const AZURE_FEDERATED_TOKEN: &str = "AZURE_FEDERATED_TOKEN";
-pub const AZURE_FEDERATED_TOKEN_FILE: &str = "AZURE_FEDERATED_TOKEN_FILE";
-pub const AZURE_TENANT_ID: &str = "AZURE_TENANT_ID";
-pub const AZURE_CLIENT_ID: &str = "AZURE_CLIENT_ID";
-pub const AZURE_AUTHORITY_HOST: &str = "AZURE_AUTHORITY_HOST";
+const AZURE_FEDERATED_TOKEN: &str = "AZURE_FEDERATED_TOKEN";
+const AZURE_FEDERATED_TOKEN_FILE: &str = "AZURE_FEDERATED_TOKEN_FILE";
+const AZURE_TENANT_ID: &str = "AZURE_TENANT_ID";
+const AZURE_CLIENT_ID: &str = "AZURE_CLIENT_ID";
+const AZURE_AUTHORITY_HOST: &str = "AZURE_AUTHORITY_HOST";
+const AZBLOB_ENDPOINT: &str = "AZBLOB_ENDPOINT";
+const AZBLOB_ACCOUNT_KEY: &str = "AZBLOB_ACCOUNT_KEY";
+const AZBLOB_ACCOUNT_NAME: &str = "AZBLOB_ACCOUNT_NAME";
 const AZURE_PUBLIC_CLOUD: &str = "https://login.microsoftonline.com";
 
 impl Config {
@@ -95,6 +98,18 @@ impl Config {
 
         if let Some(v) = envs.get(AZURE_CLIENT_ID) {
             self.client_id = Some(v.to_string());
+        }
+
+        if let Some(v) = envs.get(AZBLOB_ENDPOINT) {
+            self.endpoint = Some(v.to_string());
+        }
+
+        if let Some(v) = envs.get(AZBLOB_ACCOUNT_KEY) {
+            self.account_key = Some(v.to_string());
+        }
+
+        if let Some(v) = envs.get(AZBLOB_ACCOUNT_NAME) {
+            self.account_name = Some(v.to_string());
         }
 
         if let Some(v) = envs.get(AZURE_AUTHORITY_HOST) {
