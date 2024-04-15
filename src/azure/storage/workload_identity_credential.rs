@@ -57,7 +57,7 @@ pub async fn get_workload_identity_token(config: &Config) -> anyhow::Result<Opti
 
     if !rsp_status.is_success() {
         return Err(anyhow::anyhow!(
-            "Failed to get token from working identity credential, rsp_status = {}, rsp_body = {}",
+            "Failed to get token from working identity credential x, rsp_status = {}, rsp_body = {}",
             rsp_status,
             rsp_body
         ));
