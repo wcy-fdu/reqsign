@@ -15,7 +15,6 @@ const STORAGE_TOKEN_SCOPE: &str = "https://storage.azure.com/.default";
 ///
 /// See <https://learn.microsoft.com/en-us/azure/app-service/overview-managed-identity?tabs=portal,http#using-the-rest-protocol>
 pub async fn get_workload_identity_token(config: &Config) -> anyhow::Result<Option<LoginResponse>> {
-    println!("try to get workload_identity_token.");
     let (token, tenant_id, client_id, authority_host) = match (
         &config.federated_token,
         &config.tenant_id,
@@ -58,7 +57,7 @@ pub async fn get_workload_identity_token(config: &Config) -> anyhow::Result<Opti
 
     if !rsp_status.is_success() {
         return Err(anyhow::anyhow!(
-            "Failed to get token from working identity credential xx, rsp_status = {}, rsp_body = {}",
+            "Failed to get token from working identity credential, rsp_status = {}, rsp_body = {}",
             rsp_status,
             rsp_body
         ));
