@@ -88,9 +88,9 @@ impl Loader {
 
         match workload_identity_token {
             Some(token) => {
-                let expires_on_duration = match token.expires_on {
-                    Some(expires_on) => parse_rfc3339(&expires_on)?,
-                    None => now() + chrono::TimeDelta::try_minutes(10).expect("in bounds"),
+                let expires_on_duration = match token.expires_on.is_empty() {
+                    false => parse_rfc3339(&token.expires_on)?,
+                    true => now() + chrono::TimeDelta::try_minutes(10).expect("in bounds"),
                 };
                 Ok(Some(Credential::BearerToken(
                     token.access_token,
