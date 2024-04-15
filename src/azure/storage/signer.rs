@@ -307,8 +307,7 @@ mod tests {
             .uri("https://test.blob.core.windows.net/testbucket/testblob")
             .body(())
             .unwrap();
-        let cred =
-            AzureStorageCredential::BearerToken("token".to_string(), "expires_on".to_string());
+        let cred = AzureStorageCredential::BearerToken("token".to_string(), chrono::Utc::now());
 
         // Can effectively sign request with SigningMethod::Header
         assert!(signer.sign(&mut req, &cred).is_ok());

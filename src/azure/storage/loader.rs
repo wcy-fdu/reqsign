@@ -1,7 +1,9 @@
 use std::sync::Arc;
 use std::sync::Mutex;
 
+use crate::time::{now, parse_rfc3339, DateTime};
 use anyhow::Result;
+use chrono::Duration;
 
 use super::credential::Credential;
 use super::imds_credential;
@@ -74,7 +76,7 @@ impl Loader {
             imds_credential::get_access_token("https://storage.azure.com/", &self.config).await?;
         let cred = Some(Credential::BearerToken(
             token.access_token,
-            token.expires_on,
+            parse_rfc3339(&token.expires_on)?,
         ));
 
         Ok(cred)
@@ -83,11 +85,18 @@ impl Loader {
     async fn load_via_workload_identity(&self) -> Result<Option<Credential>> {
         let workload_identity_token =
             workload_identity_credential::get_workload_identity_token(&self.config).await?;
+
         match workload_identity_token {
-            Some(token) => Ok(Some(Credential::BearerToken(
-                token.access_token,
-                token.expires_on.unwrap_or("".to_string()),
-            ))),
+            Some(token) => {
+                let expires_on_duration = match token.expires_on {
+                    Some(expires_on) => parse_rfc3339(&expires_on)?,
+                    None => now() + chrono::TimeDelta::try_minutes(10).expect("in bounds"),
+                };
+                Ok(Some(Credential::BearerToken(
+                    token.access_token,
+                    expires_on_duration,
+                )))
+            }
             None => Ok(None),
         }
     }
