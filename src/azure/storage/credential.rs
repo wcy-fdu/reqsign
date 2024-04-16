@@ -28,8 +28,8 @@ impl Credential {
             return false;
         }
         if let Credential::BearerToken(_, expires_on) = self {
-            let buffer = chrono::Duration::minutes(2);
-            if expires_on > &(chrono::Utc::now() - buffer) {
+            let buffer = chrono::Duration::seconds(20);
+            if expires_on > &(chrono::Utc::now() + buffer) {
                 return false;
             }
         };
