@@ -28,12 +28,13 @@ impl Credential {
             return false;
         }
         if let Credential::BearerToken(_, expires_on) = self {
-            let buffer = chrono::TimeDelta::try_seconds(20).expect("in bounds");
-            if expires_on < &(chrono::Utc::now() + buffer) {
+            let buffer = chrono::Duration::seconds(20);
+            if expires_on > &(chrono::Utc::now() + buffer) {
+                return true;
+            } else {
                 return false;
             }
         };
-
         true
     }
 
