@@ -31,9 +31,10 @@ impl Credential {
             let buffer = chrono::Duration::seconds(20);
             if expires_on > &(chrono::Utc::now() + buffer) {
                 return true;
+            }else{
+                return false;
             }
         };
-
         true
     }
 
