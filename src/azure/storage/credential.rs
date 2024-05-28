@@ -29,9 +29,7 @@ impl Credential {
         }
         if let Credential::BearerToken(_, expires_on) = self {
             let buffer = chrono::Duration::seconds(20);
-            if expires_on > &(chrono::Utc::now() + buffer) {
-                return true;
-            }else{
+            if expires_on < &(chrono::Utc::now() + buffer) {
                 return false;
             }
         };
