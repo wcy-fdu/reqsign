@@ -170,6 +170,7 @@ impl Loader {
                 if defined_sts_endpoint.starts_with("https://") {
                     defined_sts_endpoint.clone()
                 } else {
+                    println!("defined_sts_endpoint = {:?}", defined_sts_endpoint);
                     format!("https://{}", defined_sts_endpoint)
                 }
             }
